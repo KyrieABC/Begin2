@@ -1,0 +1,85 @@
+
+#include<iostream>
+#include <fstream>
+#include <string>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+
+bool isPalindrome(int x) {
+    if (x < 0) {
+        return false;
+    }
+    int reversed = 0;
+    int original = x;
+    while (x != 0) {
+        int digit = x % 10;
+        reversed = reversed * 10 + digit;
+        x /= 10;
+    }
+    return reversed == original;
+}
+
+long find_max_plainprime(long n)
+{
+    long i = 0;
+    for(i = n; i > 0; i++)
+        if (isPalindrome(i)) return i;
+}
+
+long playgame(long n)
+{
+    long lend = 0, count = 0;
+    if (n < 10) return 1;
+    if (isPalindrome(n)) return 1;
+    else
+    {
+        while (n > 10)
+        {
+            n = n - find_max_plainprime(n);
+            count++;
+        }
+    }
+
+    if (count % 2 == 1) return 1;
+}
+
+
+int main() {
+    long T,n;
+
+    FILE* fp1,*fp2;
+
+    fp1=fopen("input.txt", "r");
+    fp2=fopen("output.txt", "w");
+
+    if (fp1 == NULL)
+    {
+        printf("Error opening file\n");
+        exit(1);
+    }
+
+    fscanf(fp1, "%ld", &T);
+    for (long i = 1; i <= T; i++)
+    {
+        fscanf(fp1, "%ld", &n);
+        if (playgame(n) == 1)
+        {
+            fprintf(fp2,"%c", 'B');
+            fprintf(fp2, "%c", '\n');
+            printf("%c\n",'B');
+        }
+        else
+        {
+            fprintf(fp2, "%c", 'E');
+            fprintf(fp2, "%c", '\n');
+            printf("%c\n",'E');
+        }
+    }
+
+
+    fclose(fp1);
+    fclose(fp2);
+
+    return 0;
+}
